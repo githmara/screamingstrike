@@ -5,3 +5,4 @@
 
 gameVersion = 2.00  # Game version
 appMain = None
+stressrelease = False

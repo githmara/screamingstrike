@@ -1,3 +1,4 @@
-wxpython
+wxpython==4.05
 pywin32
 pygame
+winpaths
