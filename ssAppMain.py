@@ -185,7 +185,6 @@ class ssAppMain(window.SingletonWindow):
         m.append(_("Arcade mode") + "&2")
         m.append(_("Classic mode") + "&3")
         m.append(_("Burden mode") + "&4")
-        m.append(_("Stress release mode") + "&5")
 
     def mainmenu(self):
         """
@@ -265,27 +264,27 @@ class ssAppMain(window.SingletonWindow):
         self.checkChangeLog()
         while(True):
             selected = self.mainmenu()
-            if selected is False or selected == 11:
+            if selected is False or selected == 10:
                 self.exit()
             if selected == 0:
                 if self.updateChecker.getLastResult() == updateClient.RET_NEW_VERSION_AVAILABLE:
                     self.downloadUpdate()
                 continue
             # end the update notification area
-            if selected == 6:
+            if selected == 5:
                 self.collectionDialog()
                 continue
-            if selected == 7:
+            if selected == 6:
                 self.viewScoreboard()
                 continue
-            if selected == 8:
+            if selected == 7:
                 self.displayManual()
                 continue
-            if selected == 9:
+            if selected == 8:
                 self.eraseDataDialog()
                 continue
             # end erase data
-            if selected == 10:
+            if selected == 9:
                 self.optionsDialog()
                 continue
             # end options
@@ -341,8 +340,6 @@ class ssAppMain(window.SingletonWindow):
         self.resetMusicPitch()
         self.reviewCollection(result)
         self.resultScreen(result)
-        if globalVars.stressrelease:
-            globalVars.stressrelease = False
         if result.score > 0 and result.validateScore() is True:
             self.scorePostDialog(result)
 
@@ -367,8 +364,6 @@ class ssAppMain(window.SingletonWindow):
                 self.showTip(_("This is the old-fashioned game mode! You don't get bonuses based on accuracy, so you can punch, punch, punch punch punch and punch! This mode has a sharper levelup curb, meaning that you can collect screams really fast!"))
             elif mode == gameModes.ALL_MODES_STR[3]:
                 self.showTip(_("Welcome to this new and exciting burden mode! In this mode, every item gives you a nasty effect, and each nasty effect boosts points you gain! Guess what? The more you torture yourself, the more point boost you get! Oh, but if you die because of your own torturous act, hahahahahaha, you stupid! Good luck!"))
-            elif mode == gameModes.ALL_MODES_STR[4]:
-                self.showTip(_("This is the classic mode reinforced even further! You don't get bonuses based on accuracy, so you can punch, punch, punch punch punch and punch, knowing that everything will be in the center! Also, by checking your score, you will be able to know how many enemies you punched. As you see, the only thing that limits you is your punching speed! Release your stress, anger or whatever else by mashing your space key while hearing screams of unfortunate victims!"))
 
     def showTip(self, tip):
         """Shows the ingame tip.
