@@ -77,12 +77,16 @@ class ModeHandlerBase(object):
         """
         return 2.0
 
-    def onEnemyDefeated(self):
-        """Called when the player defeated an enemy."""
+    def onEnemyDefeated(self, x=None, y=None):
+        """Called when the player defeated an enemy. x / y are the grid coordinates of the defeated enemy (may be None when unknown)."""
         pass
 
-    def onItemObtained(self):
-        """Called when the player got an item."""
+    def onItemObtained(self, it=None):
+        """Called when the player got an item. it is the obtained item.Item instance (may be None when unknown)."""
+        pass
+
+    def onItemMissed(self, it=None):
+        """Called when an item fell to the ground without being obtained. it is the missed item.Item instance."""
         pass
 
     def getName(self):
@@ -291,7 +295,7 @@ class BurdenModeHandler(ModeHandlerBase):
         self.itemComingTimer.restart()
         self.itemComingTime = random.randint(0, 60000)
 
-    def onEnemyDefeated(self):
+    def onEnemyDefeated(self, x=None, y=None):
         effects = len(self.field.player.itemEffects)
         if effects > 0:
             bc = bonusCounter.BonusCounter()
@@ -300,7 +304,7 @@ class BurdenModeHandler(ModeHandlerBase):
             self.bonusCounters.append(bc)
         # end append bonus counter
 
-    def onItemObtained(self):
+    def onItemObtained(self, it=None):
         self.spawnItem()
 
     def getModeSpecificResults(self):
