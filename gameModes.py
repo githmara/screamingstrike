@@ -77,6 +77,18 @@ class ModeHandlerBase(object):
         """
         return 2.0
 
+    def getMaxBlurredStacks(self):
+        """Maximum number of simultaneously active Blurred effects, or None for no limit."""
+        return None
+
+    def getMinPunchDelay(self):
+        """Minimum punch delay in ms (floor that boosts may not push below), or None for no limit."""
+        return None
+
+    def getMaxPunchDelay(self):
+        """Maximum punch delay in ms (cap that slow downs may not push above), or None for no limit."""
+        return None
+
     def onEnemyDefeated(self, x=None, y=None):
         """Called when the player defeated an enemy. x / y are the grid coordinates of the defeated enemy (may be None when unknown)."""
         pass
@@ -340,9 +352,10 @@ class ChaosModeHandler(ArcadeModeHandler):
       - the level up curve and the per-enemy defeat score are the same slow ones as in normal / arcade.
     The destruction item behaves chaotically too (see gameField.performDestruction).
     """
-    # Tunable scoring constants. Both scale with the current level, consistent with calculateEnemyDefeatScore.
-    ITEM_REWARD_PER_LEVEL = 75
-    MISS_PENALTY_PER_LEVEL = 50
+    # Tunable scoring constants. Both scale with the square of the current level (base * level^2),
+    # so item pickups / misses keep pace with the combat score instead of becoming negligible.
+    ITEM_REWARD_BASE = 75
+    MISS_PENALTY_BASE = 50
 
     def __init__(self):
         super().__init__()
@@ -380,15 +393,27 @@ class ChaosModeHandler(ArcadeModeHandler):
 
     def onItemObtained(self, it=None):
         """Reward the player for obtaining any item, good or nasty alike."""
-        self.field.player.addScore(self.ITEM_REWARD_PER_LEVEL * self.field.level)
+        self.field.player.addScore(self.ITEM_REWARD_BASE * self.field.level ** 2)
 
     def onItemMissed(self, it=None):
         """Penalize the player for letting an item fall to the ground."""
-        self.field.player.addScore(-1 * self.MISS_PENALTY_PER_LEVEL * self.field.level)
+        self.field.player.addScore(-1 * self.MISS_PENALTY_BASE * self.field.level ** 2)
 
     def onItemPunchedAway(self, it=None):
         """Deliberately destroying an item (UP + punch) costs double the miss penalty."""
-        self.field.player.addScore(-2 * self.MISS_PENALTY_PER_LEVEL * self.field.level)
+        self.field.player.addScore(-2 * self.MISS_PENALTY_BASE * self.field.level ** 2)
+
+    def getMaxBlurredStacks(self):
+        """Chaos: at most 2 simultaneously active Blurred effects."""
+        return 2
+
+    def getMinPunchDelay(self):
+        """Chaos: boosts may not push the punch delay below 1 ms (prevents engine hang / crash)."""
+        return 1
+
+    def getMaxPunchDelay(self):
+        """Chaos: slow downs may not push the punch delay above 800 ms."""
+        return 800
 
     def shouldObtainOnDestruction(self, it):
         """Chaos: flip a coin per item, obtain or destroy, regardless of good / nasty."""

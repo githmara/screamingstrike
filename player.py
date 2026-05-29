@@ -179,16 +179,10 @@ class Player():
             self.processShrinkItemEffect()
             return
         if it.identifier == itemConstants.NASTY_BLURRED:
-            e = itemEffects.BlurredEffect()
-            e.initialize(self)
-            e.activate(self.field.modeHandler)
-            self.itemEffects.append(e)
+            self.processBlurredItemEffect()
             return
         if it.identifier == itemConstants.NASTY_SLOWDOWN:
-            e = itemEffects.SlowDownEffect()
-            e.initialize(self)
-            e.activate(self.field.modeHandler)
-            self.itemEffects.append(e)
+            self.processSlowDownItemEffect()
             return
 
     def processShrinkItemEffect(self):
@@ -206,6 +200,58 @@ class Player():
             return
         # normal
         e = itemEffects.ShrinkEffect()
+        e.initialize(self)
+        e.activate(self.field.modeHandler)
+        self.itemEffects.append(e)
+
+    def processBlurredItemEffect(self):
+        """
+                Adds a blurred effect, respecting the mode's stack cap.
+                If the mode limits active blurred stacks and we are already at the cap,
+                extend the soonest-expiring blurred effect instead of stacking another.
+        """
+        maxStacks = self.field.modeHandler.getMaxBlurredStacks()
+        blurreds = [e for e in self.itemEffects if e.name == itemConstants.NAMES[itemConstants.TYPE_NASTY][itemConstants.NASTY_BLURRED]]
+        if maxStacks is not None and len(blurreds) >= maxStacks:
+            blurreds.sort(key=lambda e: e.calculateTimeRemaining())
+            blurreds[0].extend(itemConstants.BASE_EFFECT_TIME)
+            return
+        e = itemEffects.BlurredEffect()
+        e.initialize(self)
+        e.activate(self.field.modeHandler)
+        self.itemEffects.append(e)
+
+    def processSlowDownItemEffect(self):
+        """
+                Adds a slow down effect, respecting the mode's punch-delay cap.
+                If applying it would push the punch delay above the mode's maximum,
+                extend an existing slow down instead of stacking another.
+        """
+        maxDelay = self.field.modeHandler.getMaxPunchDelay()
+        mult = self.field.modeHandler.getSlowDownMultiplier()
+        if maxDelay is not None and self.punchSpeed * mult > maxDelay:
+            existing = self.findEffect("Slow down")
+            if existing is not None:
+                existing.extend(itemConstants.BASE_EFFECT_TIME)
+            return
+        e = itemEffects.SlowDownEffect()
+        e.initialize(self)
+        e.activate(self.field.modeHandler)
+        self.itemEffects.append(e)
+
+    def processBoostItemEffect(self):
+        """
+                Adds a boost effect, respecting the mode's punch-delay floor.
+                If halving the punch delay would drop it below the mode's minimum,
+                extend an existing boost instead of stacking another.
+        """
+        minDelay = self.field.modeHandler.getMinPunchDelay()
+        if minDelay is not None and self.punchSpeed / 2 < minDelay:
+            existing = self.findEffect("Boost")
+            if existing is not None:
+                existing.extend(itemConstants.BASE_EFFECT_TIME)
+            return
+        e = itemEffects.BoostEffect()
         e.initialize(self)
         e.activate(self.field.modeHandler)
         self.itemEffects.append(e)
@@ -228,10 +274,7 @@ class Player():
                 existing.extend(itemConstants.BASE_EFFECT_TIME)
             return
         if it.identifier == itemConstants.GOOD_BOOST:
-            e = itemEffects.BoostEffect()
-            e.initialize(self)
-            e.activate(self.field.modeHandler)
-            self.itemEffects.append(e)
+            self.processBoostItemEffect()
             return
         if it.identifier == itemConstants.GOOD_PENETRATION:
             existing = self.findEffect("Penetration")
@@ -290,6 +333,15 @@ class Player():
         :param s: New speed in milliseconds.
         :type s: int
         """
+        # Safety net for the mode's punch-delay bounds: even with the application-side guards,
+        # interleaved effect expirations can drift the delay out of range. Clamp it here so the
+        # delay never crashes the engine (too small) or freezes gameplay (too large).
+        minDelay = self.field.modeHandler.getMinPunchDelay()
+        if minDelay is not None and s < minDelay:
+            s = minDelay
+        maxDelay = self.field.modeHandler.getMaxPunchDelay()
+        if maxDelay is not None and s > maxDelay:
+            s = maxDelay
         previous = self.punchSpeed
         self.field.log(_("The speed of your punch is now %(speed)d milliseconds (from %(from)d)") % {"speed": s, "from": previous})
         self.punchSpeed = s
