@@ -77,6 +77,30 @@ class ModeHandlerBase(object):
         """
         return 2.0
 
+    def getMaxBlurredStacks(self):
+        """Maximum number of simultaneously active Blurred effects, or None for no limit."""
+        return None
+
+    def getMinPunchDelay(self):
+        """Minimum punch delay in ms (floor that boosts may not push below), or None for no limit."""
+        return None
+
+    def getMaxPunchDelay(self):
+        """Maximum punch delay in ms (cap that slow downs may not push above), or None for no limit."""
+        return None
+
+    def getMaxLives(self):
+        """Maximum number of lives (HP cap), or None for no limit."""
+        return None
+
+    def getMaxDestructionShields(self):
+        """Maximum number of stored destruction shields (autoDestructionRemaining), or None for no limit."""
+        return None
+
+    def getExtraLifeOverflowBonus(self):
+        """Bonus score granted when an Extra life is obtained while already at the life cap. Default 0."""
+        return 0
+
     def onEnemyDefeated(self, x=None, y=None):
         """Called when the player defeated an enemy. x / y are the grid coordinates of the defeated enemy (may be None when unknown)."""
         pass
@@ -348,6 +372,11 @@ class ChaosModeHandler(ArcadeModeHandler):
     # so an unbounded Destruction shower (one drop per cleared enemy) at high levels would exhaust
     # the channel pool ("can't get a free channel"). Skip new items once this many are already live.
     MAX_ITEMS_ON_FIELD = 40
+    # Bounding measures (this mode is unpublishable / for-fun only): cap HP and stored destruction
+    # shields so the run can actually end at a sane level instead of growing forever (which also
+    # prevented the BASS channel exhaustion that comes with hundreds of simultaneous enemies/items).
+    MAX_LIVES = 5
+    MAX_DESTRUCTION_SHIELDS = 3
 
     def __init__(self):
         super().__init__()
@@ -398,6 +427,30 @@ class ChaosModeHandler(ArcadeModeHandler):
     def onItemPunchedAway(self, it=None):
         """Deliberately destroying an item (UP + punch) costs double the miss penalty."""
         self.field.player.addScore(-2 * self.MISS_PENALTY_BASE * self.field.level ** 2)
+
+    def getMaxBlurredStacks(self):
+        """Chaos: at most 2 simultaneously active Blurred effects."""
+        return 2
+
+    def getMinPunchDelay(self):
+        """Chaos: boosts may not push the punch delay below 1 ms (prevents engine hang / crash)."""
+        return 1
+
+    def getMaxPunchDelay(self):
+        """Chaos: slow downs may not push the punch delay above 800 ms."""
+        return 800
+
+    def getMaxLives(self):
+        """Chaos: cap HP so the run can end at a sane level."""
+        return self.MAX_LIVES
+
+    def getMaxDestructionShields(self):
+        """Chaos: cap stored destruction shields; overflow explodes on the hero instead of extending the run."""
+        return self.MAX_DESTRUCTION_SHIELDS
+
+    def getExtraLifeOverflowBonus(self):
+        """Chaos: an Extra life obtained at the HP cap turns into bonus points (count no longer matters, score is just a number)."""
+        return self.ITEM_REWARD_BASE * self.field.level ** 2
 
     def shouldObtainOnDestruction(self, it):
         """Chaos: flip a coin per item, obtain or destroy, regardless of good / nasty."""
