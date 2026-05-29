@@ -5,6 +5,7 @@
 import math
 import random
 import bonusCounter
+import enemy
 import item
 import itemConstants
 import window
@@ -14,7 +15,19 @@ ARCADE = 1
 CLASSIC = 2
 BURDEN = 3
 CHAOS = 4
-ALL_MODES_STR = ["Normal", "Arcade", "Classic", "Burden", "Chaos"]
+YOLO = 5
+ALL_MODES_STR = ["Normal", "Arcade", "Classic", "Burden", "Chaos", "Yolo"]
+# Local-only, for-fun modes: completely excluded from the online scoreboard (no posting, no viewing).
+LOCAL_ONLY_MODES = [ALL_MODES_STR[CHAOS], ALL_MODES_STR[YOLO]]
+
+
+def isScoreboardEnabled(mode):
+    """Whether the given mode participates in the online scoreboard (posting and viewing).
+
+    :param mode: Mode string.
+    :rtype: bool
+    """
+    return mode not in LOCAL_ONLY_MODES
 
 
 class ModeHandlerBase(object):
@@ -461,6 +474,102 @@ class ChaosModeHandler(ArcadeModeHandler):
         self.dropItem(x if x is not None else random.randint(0, self.field.x - 1))
 
 
+class YoloModeHandler(ChaosModeHandler):
+    """
+    Yolo mode: a zero-player autoplay variant of Chaos. A bot drives the player by simulating
+    movement (one column step per tick) and punches, WITHOUT cheating time: it respects the real
+    punch delay (Boost / Slow down) and the real effective reach (Shrink / Megaton).
+
+    Per-tick targeting:
+      - Enemies are resolved first inside the player's column by the normal punchHit logic.
+      - The Destruction item is pursued over other items, unless an enemy is already within reach.
+      - Otherwise the bot chases the nearest object on the Y axis.
+      - When aligned, good items (incl. Destruction) are obtained, nasty items are destroyed
+        (UP + punch, accepting the penalty). The bot has perfect good/nasty knowledge.
+
+    Inherits all Chaos behavior (drops, level^2 scoring, effect limits, HP / shield caps). For
+    local for-fun use only.
+    """
+
+    def __init__(self):
+        super().__init__()
+        self.name = ALL_MODES_STR[5]
+
+    def frameUpdate(self):
+        super().frameUpdate()  # regular Chaos / Arcade item spawning
+        self._autoPlay()
+
+    def _candidates(self):
+        """Returns the list of live targets as (obj, x, y, kind) tuples; kind in enemy/destruction/good/nasty."""
+        out = []
+        for e in self.field.enemies:
+            if e is not None and e.state == enemy.STATE_ALIVE:
+                out.append((e, e.x, e.y, "enemy"))
+        for it in self.field.items:
+            if it.state != itemConstants.STATE_ALIVE:
+                continue
+            if it.type == itemConstants.TYPE_GOOD and it.identifier == itemConstants.GOOD_DESTRUCTION:
+                kind = "destruction"
+            elif it.type == itemConstants.TYPE_GOOD:
+                kind = "good"
+            else:
+                kind = "nasty"
+            out.append((it, it.x, it.y, kind))
+        return out
+
+    def _selectTarget(self, effRange):
+        """Chooses which object (column) the bot should chase this tick."""
+        cands = self._candidates()
+        if not cands:
+            return None
+        px = self.field.player.x
+        enemies = [c for c in cands if c[3] == "enemy"]
+        destrs = [c for c in cands if c[3] == "destruction"]
+        imminentEnemy = any(c[2] <= effRange for c in enemies)
+        # The Destruction item is pursued over other items, unless an enemy is already within reach.
+        if destrs and not imminentEnemy:
+            return min(destrs, key=lambda c: (c[2], abs(c[1] - px)))
+        # Otherwise chase the nearest object on Y (enemies win ties), then the closest column.
+        return min(cands, key=lambda c: (c[2], 0 if c[3] == "enemy" else 1, abs(c[1] - px)))
+
+    def _nearestInColumn(self, x, effRange):
+        """Returns the nearest hittable target (obj, x, y, kind) in column x within reach, enemies winning ties, or None."""
+        best = None
+        for c in self._candidates():
+            if c[1] != x or c[2] > effRange:
+                continue
+            if best is None or c[2] < best[2] or (c[2] == best[2] and c[3] == "enemy"):
+                best = c
+        return best
+
+    def _autoPlay(self):
+        """The zero-player bot. Drives the player like simulated key presses, respecting reach and timing."""
+        player = self.field.player
+        if player.punching:
+            return  # let the current punch land first (respect punch timing)
+        effRange = max(1, int(player.punchRange))
+        target = self._selectTarget(effRange)
+        if target is None:
+            return
+        tx = target[1]
+        # Simulate moving one column toward the target (respects movement timing).
+        if tx < player.x:
+            if player.x > 0:
+                player.moveTo(player.x - 1)
+            return
+        if tx > player.x:
+            if player.x < self.field.x - 1:
+                player.moveTo(player.x + 1)
+            return
+        # Aligned: only punch if something is actually in reach in this column (no time cheating).
+        nearest = self._nearestInColumn(player.x, effRange)
+        if nearest is None:
+            return
+        # Destroy nasty items (UP + punch), obtain everything else (enemies / good / destruction).
+        player.autoDestroyNext = (nearest[3] == "nasty")
+        player.punchLaunch()
+
+
 def getModeHandler(mode):
     """Receives a mode in string and returns the associated modeHandler object without initializing it.
 
@@ -477,4 +586,6 @@ def getModeHandler(mode):
         return BurdenModeHandler()
     if mode == ALL_MODES_STR[4]:
         return ChaosModeHandler()
+    if mode == ALL_MODES_STR[5]:
+        return YoloModeHandler()
     return None

@@ -186,6 +186,7 @@ class ssAppMain(window.SingletonWindow):
         m.append(_("Classic mode") + "&3")
         m.append(_("Burden mode") + "&4")
         m.append(_("Chaos mode") + "&5")
+        m.append(_("Yolo mode (autoplay)") + "&6")
 
     def mainmenu(self):
         """
@@ -265,27 +266,27 @@ class ssAppMain(window.SingletonWindow):
         self.checkChangeLog()
         while(True):
             selected = self.mainmenu()
-            if selected is False or selected == 11:
+            if selected is False or selected == 12:
                 self.exit()
             if selected == 0:
                 if self.updateChecker.getLastResult() == updateClient.RET_NEW_VERSION_AVAILABLE:
                     self.downloadUpdate()
                 continue
             # end the update notification area
-            if selected == 6:
+            if selected == 7:
                 self.collectionDialog()
                 continue
-            if selected == 7:
+            if selected == 8:
                 self.viewScoreboard()
                 continue
-            if selected == 8:
+            if selected == 9:
                 self.displayManual()
                 continue
-            if selected == 9:
+            if selected == 10:
                 self.eraseDataDialog()
                 continue
             # end erase data
-            if selected == 10:
+            if selected == 11:
                 self.optionsDialog()
                 continue
             # end options
@@ -341,7 +342,7 @@ class ssAppMain(window.SingletonWindow):
         self.resetMusicPitch()
         self.reviewCollection(result)
         self.resultScreen(result)
-        if result.score > 0 and result.validateScore() is True:
+        if result.score > 0 and result.validateScore() is True and gameModes.isScoreboardEnabled(mode):
             self.scorePostDialog(result)
 
     def triggerBeforeStartTips(self, mode):
@@ -367,6 +368,8 @@ class ssAppMain(window.SingletonWindow):
                 self.showTip(_("Welcome to this new and exciting burden mode! In this mode, every item gives you a nasty effect, and each nasty effect boosts points you gain! Guess what? The more you torture yourself, the more point boost you get! Oh, but if you die because of your own torturous act, hahahahahaha, you stupid! Good luck!"))
             elif mode == gameModes.ALL_MODES_STR[4]:
                 self.showTip(_("Welcome to chaos mode, where nothing is fair! Every enemy you defeat drops an item, on top of the regular item rain. Falling speed tells you nothing anymore: good and bad items are completely random. There is no accuracy bonus here; instead, grabbing any item, good or bad, earns you points, while letting one hit the ground costs you, and smashing one with your up arrow costs you double! And the destruction item? It now flips a coin for each item, obtaining or destroying it, and the enemies it clears rain down even more items. Embrace the chaos!"))
+            elif mode == gameModes.ALL_MODES_STR[5]:
+                self.showTip(_("Welcome to Yolo mode, a zero-player autoplay of chaos! Sit back and listen: a bot takes over, moving and punching for you. It always hits the nearest target, prioritizing enemies, chasing the destruction item, collecting good items and smashing bad ones. You don't need to touch the keyboard. Just enjoy the show!"))
 
     def showTip(self, tip):
         """Shows the ingame tip.
@@ -383,8 +386,11 @@ class ssAppMain(window.SingletonWindow):
 
     def viewScoreboard(self):
         """Displays the scoreboard view. Returns when user closed the dialog."""
+        # Local-only modes (Chaos, Yolo) are excluded from the scoreboard entirely.
+        scoreModes = [mm for mm in gameModes.ALL_MODES_STR if gameModes.isScoreboardEnabled(mm)]
         m = self.createMenu(_("Please select the game mode to view"))
-        self.appendModeMenus(m)
+        for mm in scoreModes:
+            m.append(_(mm + " mode"))
         m.append(_("Back"))
         while(True):
             m.open()
@@ -399,12 +405,12 @@ class ssAppMain(window.SingletonWindow):
                 break
             # Start retrieving
             adapter = buildSettings.getScoreViewAdapter()
-            ret = adapter.get(gameModes.ALL_MODES_STR[r])
+            ret = adapter.get(scoreModes[r])
             if ret == scoreViewAdapter.RET_UNAVAILABLE:
                 self.message(_("This build of %(gamename)s does not support scoreboard viewing.") % {"gamename": buildSettings.GAME_NAME})
                 continue
             # end not supported
-            m2 = self.createMenu(_("Score table for %(mode)s") % {"mode": gameModes.ALL_MODES_STR[r]})
+            m2 = self.createMenu(_("Score table for %(mode)s") % {"mode": scoreModes[r]})
             for elem in ret:
                 m2.append(elem)
             # end append

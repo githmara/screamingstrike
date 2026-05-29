@@ -46,6 +46,8 @@ class Player():
         self.itemEffects = []
         self.penetrate = False
         self.autoDestructionRemaining = 0
+        # Set by the Yolo autoplay bot to make the next punch destroy an item (UP + punch) instead of obtaining it.
+        self.autoDestroyNext = False
         self.lastHighscore = globalVars.appMain.statsStorage.get("hs_" + self.field.modeHandler.getName())
         self.gotHighscore = False
 
@@ -105,7 +107,7 @@ class Player():
                 break
             for elem in self.field.items:
                 if elem.state == itemConstants.STATE_ALIVE and self.x == elem.x and elem.y == pos:
-                    if globalVars.appMain.keyPressing(window.K_UP):
+                    if globalVars.appMain.keyPressing(window.K_UP) or self.autoDestroyNext:
                         elem.punch()
                     else:
                         elem.obtain()
@@ -122,6 +124,7 @@ class Player():
                 # end if
             # end for items
         # end for range
+        self.autoDestroyNext = False  # one-shot: consumed by this punch
         if not hit:
             self.punchMiss()
     # end punchHit
