@@ -90,6 +90,11 @@ class sound():
     def pitch(self, value):
         if value > 400:
             value = 400
+        # Lower clamp: a pitch at / below zero (e.g. when stacked slow-down effects push the
+        # punch speed very high) yields a zero / negative frequency, which BASS rejects with an
+        # "illegal parameter" error. Floor it to a small positive value to stay in BASS' valid range.
+        if value < 5:
+            value = 5
         if not self.handle:
             return False
         self.handle.set_frequency((float(value) / 100) * self.freq)
