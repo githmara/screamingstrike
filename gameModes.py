@@ -89,6 +89,10 @@ class ModeHandlerBase(object):
         """Called when an item fell to the ground without being obtained. it is the missed item.Item instance."""
         pass
 
+    def onItemPunchedAway(self, it=None):
+        """Called when the player deliberately destroyed an item by punching it with the UP arrow held. it is the destroyed item.Item instance."""
+        pass
+
     def getName(self):
         """
         Retrieves the name of this mode. Normal, arcade or classic. There may be more future modes.
@@ -369,6 +373,10 @@ class ChaosModeHandler(ArcadeModeHandler):
     def onItemMissed(self, it=None):
         """Penalize the player for letting an item fall to the ground."""
         self.field.player.addScore(-1 * self.MISS_PENALTY_PER_LEVEL * self.field.level)
+
+    def onItemPunchedAway(self, it=None):
+        """Deliberately destroying an item (UP + punch) costs double the miss penalty."""
+        self.field.player.addScore(-2 * self.MISS_PENALTY_PER_LEVEL * self.field.level)
 
 
 def getModeHandler(mode):

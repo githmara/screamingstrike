@@ -64,6 +64,9 @@ class Item():
             return False
         self.switchState(STATE_BROKEN)
         self.field.log(_("A \"%(item)s\" item fell on the ground and shattered into peaces!") % {"item": NAMES[self.type][self.identifier]})
+        # Items destroyed by the Destruction effect go through destroy() instead of this path,
+        # so they are correctly exempt from the miss penalty.
+        self.field.modeHandler.onItemMissed(self)
         return True
 
     def obtain(self):
@@ -83,12 +86,15 @@ class Item():
         self.switchState(STATE_SHOULDBEDELETED)
 
     def punch(self):
-        """Called when this item was punched and destroyed."""
+        """Called when this item was punched and destroyed (deliberate UP + punch)."""
         s = bgtsound.sound()
         s.load(globalVars.appMain.sounds["hit.ogg"])
         s.pan = self.field.getPan(self.x)
         s.pitch = random.randint(70, 130)
         s.play()
+        # Note: destroy() is also used by the Destruction effect, so the deliberate-destruction
+        # penalty lives here in punch(), not in destroy(), to keep Destruction penalty-free.
+        self.field.modeHandler.onItemPunchedAway(self)
         self.destroy()
 
     def destroy(self):
