@@ -18,3 +18,4 @@ dist/
 ss.spec
 *.dmg
 .ds_store
+.venv
