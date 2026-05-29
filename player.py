@@ -82,7 +82,11 @@ class Player():
         """Process punch hits. Called from frameUpdate as it is needed."""
         self.punching = False
         hit = 0
-        for pos in range(int(self.punchRange) + 1):
+        # Effective reach is floored at 1: overlapping Megaton (x5 / /5) and Shrink (x0.5 floor)
+        # effects can drift punchRange to a fractional or sub-1 value, which would otherwise leave
+        # the fist only able to reach position 0 (practically useless). Keep at least reach 1.
+        effectiveRange = max(1, int(self.punchRange))
+        for pos in range(effectiveRange + 1):
             for elem in self.field.enemies:
                 if elem is not None and elem.state == enemy.STATE_ALIVE and self.x == elem.x and elem.y == pos:
                     elem.hit()
