@@ -185,6 +185,7 @@ class ssAppMain(window.SingletonWindow):
         m.append(_("Arcade mode") + "&2")
         m.append(_("Classic mode") + "&3")
         m.append(_("Burden mode") + "&4")
+        m.append(_("Chaos mode") + "&5")
 
     def mainmenu(self):
         """
@@ -264,27 +265,27 @@ class ssAppMain(window.SingletonWindow):
         self.checkChangeLog()
         while(True):
             selected = self.mainmenu()
-            if selected is False or selected == 10:
+            if selected is False or selected == 11:
                 self.exit()
             if selected == 0:
                 if self.updateChecker.getLastResult() == updateClient.RET_NEW_VERSION_AVAILABLE:
                     self.downloadUpdate()
                 continue
             # end the update notification area
-            if selected == 5:
+            if selected == 6:
                 self.collectionDialog()
                 continue
-            if selected == 6:
+            if selected == 7:
                 self.viewScoreboard()
                 continue
-            if selected == 7:
+            if selected == 8:
                 self.displayManual()
                 continue
-            if selected == 8:
+            if selected == 9:
                 self.eraseDataDialog()
                 continue
             # end erase data
-            if selected == 9:
+            if selected == 10:
                 self.optionsDialog()
                 continue
             # end options
@@ -364,6 +365,8 @@ class ssAppMain(window.SingletonWindow):
                 self.showTip(_("This is the old-fashioned game mode! You don't get bonuses based on accuracy, so you can punch, punch, punch punch punch and punch! This mode has a sharper levelup curb, meaning that you can collect screams really fast!"))
             elif mode == gameModes.ALL_MODES_STR[3]:
                 self.showTip(_("Welcome to this new and exciting burden mode! In this mode, every item gives you a nasty effect, and each nasty effect boosts points you gain! Guess what? The more you torture yourself, the more point boost you get! Oh, but if you die because of your own torturous act, hahahahahaha, you stupid! Good luck!"))
+            elif mode == gameModes.ALL_MODES_STR[4]:
+                self.showTip(_("Welcome to chaos mode, where nothing is fair! Every enemy you defeat drops an item, on top of the regular item rain. Falling speed tells you nothing anymore: good and bad items are completely random. There is no accuracy bonus here; instead, grabbing any item, good or bad, earns you points, while letting one hit the ground costs you, and smashing one with your up arrow costs you double! And the destruction item? It now flips a coin for each item, obtaining or destroying it, and the enemies it clears rain down even more items. Embrace the chaos!"))
 
     def showTip(self, tip):
         """Shows the ingame tip.

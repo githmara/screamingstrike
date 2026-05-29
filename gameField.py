@@ -3,6 +3,7 @@
 # Copyright (C) 2019 Yukio Nozawa <personal@nyanchangames.com>
 # License: GPL V2.0 (See copying.txt for details)
 import datetime
+import os
 import random
 import bgtsound
 import bonusCounter
@@ -23,6 +24,16 @@ class GameField():
         self.paused = False
         self.easter = easter
         self.logs = []
+        # Optional real-time log mirroring. When the SS_REALTIME_LOG env var holds a path, every log
+        # entry (the same lines shown in the pause menu) is appended to that file as it happens, so the
+        # actual balance of a session can be inspected live / by tests. The file is truncated per game.
+        self.realtimeLogPath = os.environ.get("SS_REALTIME_LOG") or None
+        if self.realtimeLogPath:
+            try:
+                with open(self.realtimeLogPath, mode='w', encoding='utf-8') as f:
+                    f.write("")
+            except OSError:
+                self.realtimeLogPath = None
         self.log(_("Game started at %(startedtime)s!") % {"startedtime": datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S")})
         self.x = x
         self.y = y
@@ -116,6 +127,12 @@ class GameField():
 
     def log(self, s):
         self.logs.append(s)
+        if self.realtimeLogPath:
+            try:
+                with open(self.realtimeLogPath, mode='a', encoding='utf-8') as f:
+                    f.write(s + "\n")
+            except OSError:
+                pass
 
     def getLog(self):
         """Retrieves the list in which the log is written.

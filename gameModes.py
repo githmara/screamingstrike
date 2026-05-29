@@ -351,7 +351,7 @@ class ChaosModeHandler(ArcadeModeHandler):
         self.name = ALL_MODES_STR[4]
 
     def _createItem(self, x=None):
-        """Creates a single item with a fully random type (independent of speed) and appends it to the field."""
+        """Creates a single item with a fully random type (independent of speed), appends it to the field and returns it."""
         spd = random.randint(100, 800)
         t = itemConstants.TYPE_NASTY if random.randint(0, 1) == 0 else itemConstants.TYPE_GOOD
         ident = self.selectNastyItem() if t == itemConstants.TYPE_NASTY else random.randint(0, item.GOOD_MAX)
@@ -360,6 +360,7 @@ class ChaosModeHandler(ArcadeModeHandler):
         i = item.Item()
         i.initialize(self.field, x, spd, t, ident)
         self.field.items.append(i)
+        return i
 
     def spawnItem(self, x=None):
         """Regular / shower spawn. Resets the coming timer like arcade mode does."""
@@ -368,7 +369,8 @@ class ChaosModeHandler(ArcadeModeHandler):
 
     def dropItem(self, x):
         """Drops an item at the given column without disturbing the regular spawn cadence."""
-        self._createItem(x)
+        i = self._createItem(x)
+        self.field.log(_("An enemy dropped a \"%(item)s\" item!") % {"item": itemConstants.NAMES[i.type][i.identifier]})
 
     def onEnemyDefeated(self, x=None, y=None):
         """Every defeated enemy drops an item where it was standing."""
