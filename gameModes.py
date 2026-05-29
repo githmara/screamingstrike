@@ -346,7 +346,9 @@ class ChaosModeHandler(ArcadeModeHandler):
 
     def __init__(self):
         super().__init__()
-        # No accuracy bonus in chaos mode; scoring is driven by item pickups / misses instead.
+        # No accuracy-based bonuses in chaos mode; scoring is driven by item pickups / misses instead.
+        # Disable both the level-up (accuracy) bonus and the consecutive-hits bonus (inherited as True from arcade).
+        self.allowConsecutiveHitsBonus = False
         self.allowLevelupBonus = False
         self.name = ALL_MODES_STR[4]
 
