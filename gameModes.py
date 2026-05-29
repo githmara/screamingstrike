@@ -13,7 +13,8 @@ NORMAL = 0
 ARCADE = 1
 CLASSIC = 2
 BURDEN = 3
-ALL_MODES_STR = ["Normal", "Arcade", "Classic", "Burden"]
+CHAOS = 4
+ALL_MODES_STR = ["Normal", "Arcade", "Classic", "Burden", "Chaos"]
 
 
 class ModeHandlerBase(object):
@@ -313,6 +314,59 @@ class BurdenModeHandler(ModeHandlerBase):
         return "%(boost)sx highest boost" % {"boost": boost}
 
 
+class ChaosModeHandler(ArcadeModeHandler):
+    """
+    Chaos mode. Inherits the regular item spawns and item shower from arcade mode, but:
+      - every defeated enemy drops an item (in addition to the regular spawns),
+      - item type (good / nasty) is fully random and no longer correlated with falling speed,
+      - the accuracy-based levelup bonus is disabled; instead the player is rewarded for
+        obtaining ANY item and penalized for letting an item fall to the ground,
+      - the level up curve and the per-enemy defeat score are the same slow ones as in normal / arcade.
+    The destruction item behaves chaotically too (see gameField.performDestruction).
+    """
+    # Tunable scoring constants. Both scale with the current level, consistent with calculateEnemyDefeatScore.
+    ITEM_REWARD_PER_LEVEL = 75
+    MISS_PENALTY_PER_LEVEL = 50
+
+    def __init__(self):
+        super().__init__()
+        # No accuracy bonus in chaos mode; scoring is driven by item pickups / misses instead.
+        self.allowLevelupBonus = False
+        self.name = ALL_MODES_STR[4]
+
+    def _createItem(self, x=None):
+        """Creates a single item with a fully random type (independent of speed) and appends it to the field."""
+        spd = random.randint(100, 800)
+        t = itemConstants.TYPE_NASTY if random.randint(0, 1) == 0 else itemConstants.TYPE_GOOD
+        ident = self.selectNastyItem() if t == itemConstants.TYPE_NASTY else random.randint(0, item.GOOD_MAX)
+        if x is None:
+            x = random.randint(0, self.field.x - 1)
+        i = item.Item()
+        i.initialize(self.field, x, spd, t, ident)
+        self.field.items.append(i)
+
+    def spawnItem(self, x=None):
+        """Regular / shower spawn. Resets the coming timer like arcade mode does."""
+        self._createItem(x)
+        self.resetItemComingTimer()
+
+    def dropItem(self, x):
+        """Drops an item at the given column without disturbing the regular spawn cadence."""
+        self._createItem(x)
+
+    def onEnemyDefeated(self, x=None, y=None):
+        """Every defeated enemy drops an item where it was standing."""
+        self.dropItem(x if x is not None else random.randint(0, self.field.x - 1))
+
+    def onItemObtained(self, it=None):
+        """Reward the player for obtaining any item, good or nasty alike."""
+        self.field.player.addScore(self.ITEM_REWARD_PER_LEVEL * self.field.level)
+
+    def onItemMissed(self, it=None):
+        """Penalize the player for letting an item fall to the ground."""
+        self.field.player.addScore(-1 * self.MISS_PENALTY_PER_LEVEL * self.field.level)
+
+
 def getModeHandler(mode):
     """Receives a mode in string and returns the associated modeHandler object without initializing it.
 
@@ -327,4 +381,6 @@ def getModeHandler(mode):
         return ClassicModeHandler()
     if mode == ALL_MODES_STR[3]:
         return BurdenModeHandler()
+    if mode == ALL_MODES_STR[4]:
+        return ChaosModeHandler()
     return None

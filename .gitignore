@@ -21,3 +21,4 @@ ss.spec
 .venv
 .claude/
 CLAUDE.md
+_reports/
