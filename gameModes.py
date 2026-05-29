@@ -344,6 +344,10 @@ class ChaosModeHandler(ArcadeModeHandler):
     # so item pickups / misses keep pace with the combat score instead of becoming negligible.
     ITEM_REWARD_BASE = 75
     MISS_PENALTY_BASE = 50
+    # Hard cap on simultaneous items on the field. Each falling item holds a looped BASS channel,
+    # so an unbounded Destruction shower (one drop per cleared enemy) at high levels would exhaust
+    # the channel pool ("can't get a free channel"). Skip new items once this many are already live.
+    MAX_ITEMS_ON_FIELD = 40
 
     def __init__(self):
         super().__init__()
@@ -354,7 +358,9 @@ class ChaosModeHandler(ArcadeModeHandler):
         self.name = ALL_MODES_STR[4]
 
     def _createItem(self, x=None):
-        """Creates a single item with a fully random type (independent of speed), appends it to the field and returns it."""
+        """Creates a single item with a fully random type (independent of speed), appends it to the field and returns it. Returns None if the field is already at the item cap."""
+        if len(self.field.items) >= self.MAX_ITEMS_ON_FIELD:
+            return None
         spd = random.randint(100, 800)
         t = itemConstants.TYPE_NASTY if random.randint(0, 1) == 0 else itemConstants.TYPE_GOOD
         ident = self.selectNastyItem() if t == itemConstants.TYPE_NASTY else random.randint(0, item.GOOD_MAX)
@@ -373,6 +379,8 @@ class ChaosModeHandler(ArcadeModeHandler):
     def dropItem(self, x):
         """Drops an item at the given column without disturbing the regular spawn cadence."""
         i = self._createItem(x)
+        if i is None:  # field at item cap; skip the drop (and its log)
+            return
         self.field.log(_("An enemy dropped a \"%(item)s\" item!") % {"item": itemConstants.NAMES[i.type][i.identifier]})
 
     def onEnemyDefeated(self, x=None, y=None):
