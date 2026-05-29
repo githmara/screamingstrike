@@ -185,16 +185,20 @@ class GameField():
     def performDestruction(self):
         self.destruct.play()
         self.log(_("Activating destruction!"))
+        # Snapshot items present before clearing, so items freshly dropped by cleared enemies
+        # (Chaos mode) are not immediately resolved and instead keep falling.
+        items = self.items[:]
         for elem in self.enemies:
             if elem is not None and elem.state == enemy.STATE_ALIVE:
                 elem.hit()
+                self.modeHandler.onEnemyDefeatedByDestruction(elem.x, elem.y)
             self.logDefeat()
-        for elem in self.items:
-            if elem.type == itemConstants.TYPE_NASTY:
-                elem.destroy()
-            else:
+        for elem in items:
+            if self.modeHandler.shouldObtainOnDestruction(elem):
                 elem.obtain()
                 self.player.processItemHit(elem)
+            else:
+                elem.destroy()
         self.destructing = False
         self.log(_("End destruction!"))
 # end class GameField

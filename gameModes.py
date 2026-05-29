@@ -93,6 +93,14 @@ class ModeHandlerBase(object):
         """Called when the player deliberately destroyed an item by punching it with the UP arrow held. it is the destroyed item.Item instance."""
         pass
 
+    def shouldObtainOnDestruction(self, it):
+        """Decides what the Destruction effect does with an item. Default: good items are obtained, nasty items are destroyed."""
+        return it.type == itemConstants.TYPE_GOOD
+
+    def onEnemyDefeatedByDestruction(self, x=None, y=None):
+        """Called for each enemy cleared by the Destruction effect. Kept separate from onEnemyDefeated so Burden's bonus logic is not triggered here. Default no-op."""
+        pass
+
     def getName(self):
         """
         Retrieves the name of this mode. Normal, arcade or classic. There may be more future modes.
@@ -377,6 +385,14 @@ class ChaosModeHandler(ArcadeModeHandler):
     def onItemPunchedAway(self, it=None):
         """Deliberately destroying an item (UP + punch) costs double the miss penalty."""
         self.field.player.addScore(-2 * self.MISS_PENALTY_PER_LEVEL * self.field.level)
+
+    def shouldObtainOnDestruction(self, it):
+        """Chaos: flip a coin per item, obtain or destroy, regardless of good / nasty."""
+        return random.randint(0, 1) == 0
+
+    def onEnemyDefeatedByDestruction(self, x=None, y=None):
+        """Chaos: enemies cleared by Destruction drop items too, creating a fresh item shower (bigger at higher levels)."""
+        self.dropItem(x if x is not None else random.randint(0, self.field.x - 1))
 
 
 def getModeHandler(mode):
