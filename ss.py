@@ -20,7 +20,31 @@ import buildSettings
 from ssAppMain import *
 
 
+def loadDotEnv(path=".env"):
+    """Minimal, dependency-free .env loader.
+
+    Sets os.environ[KEY] = VALUE for each KEY=VALUE line (only when KEY is not already in the
+    environment). Used for diagnostic flags such as SS_REALTIME_LOG in frozen builds, where setting
+    a real environment variable is awkward: just drop a .env next to the executable. A missing or
+    malformed file is silently ignored. Not shipped with releases.
+    """
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            for line in f:
+                line = line.strip()
+                if not line or line.startswith("#") or "=" not in line:
+                    continue
+                key, value = line.split("=", 1)
+                key = key.strip()
+                value = value.strip().strip('"').strip("'")
+                if key and key not in os.environ:
+                    os.environ[key] = value
+    except OSError:
+        pass
+
+
 def main():
+    loadDotEnv()
     app = ssAppMain()
     app.initialize()
     app.run()

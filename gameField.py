@@ -6,6 +6,7 @@ import datetime
 import os
 import random
 import bgtsound
+from sound_lib.main import BassError
 import bonusCounter
 import collection
 import enemy
@@ -194,28 +195,48 @@ class GameField():
     def startDestruction(self):
         if self.destructing:
             return False
-        self.destructPowerup.play()
+        # Reload before playing: these persistent sound objects hold a sample channel for the whole
+        # game, which BASS can recycle (invalidating the handle) when the same sample is replayed
+        # elsewhere. A fresh channel keeps the handle valid. Any residual BASS error is non-fatal.
+        try:
+            self.destructPowerup.load(globalVars.appMain.sounds["destructPowerup.ogg"])
+            self.destructPowerup.play()
+        except BassError:
+            pass
         self.destructTimer.restart()
         self.destructing = True
         return True
 
     def performDestruction(self):
-        self.destruct.play()
+        try:
+            self.destruct.load(globalVars.appMain.sounds["destruct.ogg"])
+            self.destruct.play()
+        except BassError:
+            pass
         self.log(_("Activating destruction!"))
         # Snapshot items present before clearing, so items freshly dropped by cleared enemies
         # (Chaos mode) are not immediately resolved and instead keep falling.
         items = self.items[:]
         for elem in self.enemies:
             if elem is not None and elem.state == enemy.STATE_ALIVE:
-                elem.hit()
-                self.modeHandler.onEnemyDefeatedByDestruction(elem.x, elem.y)
+                # Swallow only sound errors so one failed audio call (e.g. BASS running out of
+                # channels during a big destruction shower) never crashes the whole game. With
+                # dozens of items clearing at once, a missed sound is imperceptible.
+                try:
+                    elem.hit()
+                    self.modeHandler.onEnemyDefeatedByDestruction(elem.x, elem.y)
+                except BassError:
+                    pass
             self.logDefeat()
         for elem in items:
-            if self.modeHandler.shouldObtainOnDestruction(elem):
-                elem.obtain()
-                self.player.processItemHit(elem)
-            else:
-                elem.destroy()
+            try:
+                if self.modeHandler.shouldObtainOnDestruction(elem):
+                    elem.obtain()
+                    self.player.processItemHit(elem)
+                else:
+                    elem.destroy()
+            except BassError:
+                pass
         self.destructing = False
         self.log(_("End destruction!"))
 # end class GameField
