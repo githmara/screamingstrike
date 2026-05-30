@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: screamingStrike\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-26 21:52+0900\n"
+"POT-Creation-Date: 2026-05-30 10:24+0200\n"
 "PO-Revision-Date: 2021-09-26 21:54+0900\n"
 "Last-Translator: Yukio Nozawa <support@nyanchangames.com>\n"
 "Language-Team: \n"
@@ -17,7 +17,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 3.0\n"
 
-#: collection.py:216
 msgid ""
 "Use your left and right arrows to brows your collections, then press enter "
 "to make your unlocked one scream. You can move through your unlocked items "
@@ -29,35 +28,31 @@ msgstr ""
 "たコレクションにカーソルを移動します。ピッチ変更で遊ぶには、上下の矢印キーを"
 "押します。満足したら、エスケープキーを押してください。"
 
-#: collection.py:272
 msgid "Unlocked"
 msgstr "解放"
 
-#: collection.py:275
 msgid "Locked"
 msgstr "未解放"
 
-#: collection.py:277
 #, python-format
 msgid "No.%(no)d, %(status)s, %(plays)d"
 msgstr "No.%(no)d, %(status)s, %(plays)d"
 
-#: gameField.py:26
 #, python-format
 msgid "Game started at %(startedtime)s!"
 msgstr "%(startedtime)sにゲームを開始!"
 
-#: gameField.py:62
 #, python-format
 msgid "Playing: %(mode)s, high score: %(highscore)d."
 msgstr "プレイ: %(mode)s、ハイスコア: %(highscore)d。"
 
-#: gameField.py:90
+msgid " mode"
+msgstr ""
+
 #, python-format
 msgid "Game over! Final score: %(score)d"
 msgstr "ゲームオーバー! 最終得点: %(score)d"
 
-#: gameField.py:133
 #, python-format
 msgid ""
 "Leveled up to %(newlevel)d! (Accuracy %(accuracy).1f%%, with %(lives)d hp "
@@ -65,86 +60,72 @@ msgid ""
 msgstr ""
 "レベル%(newlevel)dにアップ! (ヒット率 %(accuracy).1f%%, 残りHP %(lives)d"
 
-#: gameField.py:170
 msgid "Game aborted."
 msgstr "ゲームを中断しました。"
 
-#: gameField.py:187
 msgid "Activating destruction!"
 msgstr "デストラクションが発動!"
 
-#: gameField.py:199
 msgid "End destruction!"
 msgstr "デストラクション終了!"
 
-#: gameModes.py:58
 #, python-format
 msgid "Hit! (speed %(speed)d, distance %(distance)d, penetration bonus added)"
 msgstr "ヒット! (スピード %(speed)d, 距離 %(distance)d)"
 
-#: gameModes.py:60
 #, python-format
 msgid "Hit! (speed %(speed)d, distance %(distance)d)"
 msgstr "ヒット! (スピード %(speed)d, 距離 %(distance)d)"
 
-#: gameModes.py:222
 #, python-format
 msgid "Hit! (speed %(speed)d, burden %(burden)d, %(boost)sx boost)"
 msgstr ""
 "ヒット! (スピード %(speed)d, バーデン %(burden)d、 ブースト %(boost)s倍)"
 
-#: gameModes.py:304
 #, python-format
 msgid "Highest boost: %(boost)sx"
 msgstr "最大ブースト: %(boost)s倍"
 
-#: gameResult.py:36
+#, python-format
+msgid "An enemy dropped a \"%(item)s\" item!"
+msgstr ""
+
 msgid "minute"
 msgstr "分"
 
-#: gameResult.py:36
 msgid "minutes"
 msgstr "分"
 
-#: gameResult.py:37
 msgid "second"
 msgstr "秒"
 
-#: gameResult.py:37
 msgid "seconds"
 msgstr "秒"
 
-#: gameResult.py:38
 #, python-format
 msgid "%(min)d %(minunit)s and %(sec)d %(secunit)s"
 msgstr "%(min)d%(minunit)s %(sec)d%(secunit)s"
 
-#: item.py:66
 #, python-format
 msgid "A \"%(item)s\" item fell on the ground and shattered into peaces!"
 msgstr "アイテム \"%(item)s\" が地面に落ちて、粉々に砕けた!"
 
-#: item.py:70
 #, python-format
 msgid "Obtained a \"%(item)s\" item!"
 msgstr "アイテム \"%(item)s\"をゲット!"
 
-#: item.py:95
 #, python-format
 msgid "A \"%(item)s\" item was shattered into peaces!"
 msgstr "アイテム \"%(item)s\" が粉々に砕かれた!!"
 
-#: itemEffects.py:34
 #, python-format
 msgid "A new \"%(item)s\" effect is starting!"
 msgstr "新しいアイテム \"%(item)s\" の効果がスタート!"
 
-#: itemEffects.py:41
 #, python-format
 msgid "One of your \"%(item)s\" effects is ending!"
 msgstr "\"%(item)s\" の効果の一つが消失!"
 
-#: itemEffects.py:49
 #, python-format
 msgid ""
 "Your \"%(item)s\" effect has been extended for %(extended)d milliseconds! "
@@ -153,130 +134,116 @@ msgstr ""
 "発動中のアイテム \"%(item)s\" の効果が %(extended)d ミリ秒延長! (現在 "
 "%(newtime)d)"
 
-#: itemEffects.py:57
 #, python-format
 msgid "%(name)s: %(sec).2f seconds left"
 msgstr "%(name)s: 残り %(sec).2f秒"
 
-#: player.py:137
 #, python-format
 msgid "%(hits)d consecutive hits bonus!"
 msgstr "%(hits)d回の連続ヒットボーナス!"
 
-#: player.py:148
 #, python-format
 msgid "%(misses)d consecutive misses penalty!"
 msgstr "%(misses)d回の連続ミスペナルティー!"
 
-#: player.py:246
 #, python-format
 msgid "This effect will be used when it's necessary! (Remaining %(r)d)"
 msgstr "この効果は、必要になったときに自動的に発動! (残り %(r)d)"
 
-#: player.py:250
+msgid "Extra life at maximum HP! Converted to bonus points."
+msgstr ""
+
 #, python-format
 msgid "Extra life! (now %(lives)d lives)"
 msgstr "エクストラライフ! (現在 %(lives)d)"
 
-#: player.py:279
 #, python-format
 msgid "The effective range of your Punch is now %(range)d (from %(from)d)"
 msgstr "パンチが届く範囲が、%(from)dから%(range)dに変化!"
 
-#: player.py:290
 #, python-format
 msgid "The speed of your punch is now %(speed)d milliseconds (from %(from)d)"
 msgstr "パンチのスピードが、%(from)dから%(speed)dミリ秒に変化!"
 
-#: player.py:301
 msgid "Your punches now penetrate enemies and items!"
 msgstr "しばらくの間、パンチが敵とアイテムを貫通するぞ!"
 
-#: player.py:303
 msgid "Your punches no longer penetrate enemies and items!"
 msgstr "パンチの貫通効果が消失!"
 
-#: player.py:327
 msgid "You're about to be attacked, but you have a counter!"
 msgstr "ひっぱたかれそうになったが、カウンター!"
 
-#: player.py:333
 #, python-format
 msgid "You've been slapped! (%(lives)d HP remaining)"
 msgstr "ひっぱたかれた!(残りHP %(lives)d)"
 
-#: player.py:339
 msgid "Game over!"
 msgstr "ゲームオーバー!"
 
-#: player.py:356
+#, python-format
+msgid ""
+"Too many stored destructions! It explodes on you! (%(lives)d HP remaining)"
+msgstr ""
+
 msgid "added"
 msgstr "プラス"
 
-#: player.py:358
 msgid "subtracted"
 msgstr "マイナス"
 
-#: player.py:359
 #, python-format
 msgid "Point: %(added).1f %(changestr)s (%(total).1f)"
 msgstr "ポイント: %(added).1f %(changestr)s (%(total).1f)"
 
-#: ssAppMain.py:184
 msgid "Normal mode"
 msgstr "ノーマルモード"
 
-#: ssAppMain.py:185
 msgid "Arcade mode"
 msgstr "アーケードモード"
 
-#: ssAppMain.py:186
 msgid "Classic mode"
 msgstr "クラシックモード"
 
-#: ssAppMain.py:187
 msgid "Burden mode"
 msgstr "バーデンモード"
 
-#: ssAppMain.py:196
+msgid "Chaos mode"
+msgstr ""
+
+msgid "Yolo mode (autoplay)"
+msgstr ""
+
 msgid ""
 "Main menu. Use your up and down arrows to choose an option, then press enter "
 "to confirm"
 msgstr ""
 "メインメニューです。上下の矢印キーで項目を選択し、エンターキーで決定します。"
 
-#: ssAppMain.py:199
 msgid "Collection"
 msgstr "コレクション"
 
-#: ssAppMain.py:200
 msgid "View the scoreboard"
 msgstr "スコアボードを閲覧"
 
-#: ssAppMain.py:201
 msgid "Read the manual"
 msgstr "マニュアルを読む"
 
-#: ssAppMain.py:202
 msgid "Erase data"
 msgstr "データ削除"
 
-#: ssAppMain.py:203
 msgid "Options"
 msgstr "オプション"
 
-#: ssAppMain.py:204
 msgid "Quit"
 msgstr "終了"
 
-#: ssAppMain.py:227
 #, python-format
 msgid "Update checking is disabled in this build of %(gamename)s."
 msgstr ""
 "この %(gamename)s のビルドでは、アップデートチェック機能は無効化されていま"
 "す。"
 
-#: ssAppMain.py:229
 #, python-format
 msgid ""
 "There was an error while retrieving software update information (%(error)s). "
@@ -285,7 +252,6 @@ msgstr ""
 "更新情報の取得中にエラーが発生しました(%(error)s)。しばらくしてからもう一度お"
 "試しください。"
 
-#: ssAppMain.py:232
 msgid ""
 "You're playing the latest version! When a new update is found, you will be "
 "notified here."
@@ -293,32 +259,27 @@ msgstr ""
 "最新版をお使いのようです！新しいアップデートがあるときは、ここに通知が出ま"
 "す。"
 
-#: ssAppMain.py:235
 msgid "There is a new version of the game! Press enter here to download it."
 msgstr ""
 "新しいバージョンがあります！ここでエンターを押すと、新バージョンをダウンロー"
 "ドできます。"
 
-#: ssAppMain.py:248
 #, python-format
 msgid "Downloading the new version (%(current)dK/%(total)dK (%(percent)d%%)"
 msgstr ""
 "新しいバージョンをダウンロードしています (%(current)dK/%(total)dK "
 "(%(percent)d%%)"
 
-#: ssAppMain.py:254
 #, python-format
 msgid "The new version has been downloaded to %(location)s."
 msgstr "新しいバージョンが、 %(location)s にダウンロードされました。"
 
-#: ssAppMain.py:256
 #, python-format
 msgid "Failed to download the new update (%(reason)s). Press enter to retry."
 msgstr ""
 "新しいバージョンのダウンロードに失敗しました (%(reason)s)。 エンターを押すと"
 "再試行できます。"
 
-#: ssAppMain.py:304
 #, python-format
 msgid "This build of %(gamename)s doesn't have download location set."
 msgstr ""
@@ -326,19 +287,15 @@ msgstr ""
 "Screaming Strikeのビルドでは、スコア送信はサポートされていません。ごめんなさ"
 "い！"
 
-#: ssAppMain.py:307 ssAppMain.py:308
 msgid "Select the folder where you want to download the installer."
 msgstr "インストーラーをダウンロードするフォルダーを指定してください。"
 
-#: ssAppMain.py:314
 msgid "Warning"
 msgstr "渓谷"
 
-#: ssAppMain.py:314
 msgid " already exists. Do you want to overwrite?"
 msgstr "は、すでに存在します。上書きしますか？"
 
-#: ssAppMain.py:357
 #, python-format
 msgid ""
 "This is the new standard mode of %(gamename)s. Use your left and right "
@@ -352,7 +309,6 @@ msgstr ""
 "前のバージョンに、レベルアップ時のヒット率ボーナスが加わっています。また、5回"
 "以上の連続ヒットを達成すると、それもボーナスポイントになります！"
 
-#: ssAppMain.py:361
 #, python-format
 msgid ""
 "This is the new arcade mode of %(gamename)s! From the new version, items "
@@ -366,7 +322,6 @@ msgstr ""
 "チするとアイテムを取ることができ、上矢印キーを押しながらパンチすると、アイテ"
 "ムを壊すことができます。どのアイテムを撮るか、身長に選びましょう！"
 
-#: ssAppMain.py:364
 msgid ""
 "This is the old-fashioned game mode! You don't get bonuses based on "
 "accuracy, so you can punch, punch, punch punch punch and punch! This mode "
@@ -377,7 +332,6 @@ msgstr ""
 "す！あと、他のモードよりも早く敵の数が増えるようになっていますので、コレク"
 "ションを荒稼ぎするのにもってこいのモードです！"
 
-#: ssAppMain.py:366
 msgid ""
 "Welcome to this new and exciting burden mode! In this mode, every item gives "
 "you a nasty effect, and each nasty effect boosts points you gain! Guess "
@@ -391,31 +345,44 @@ msgstr ""
 "ね!おっと、でも、追い込みすぎて死んでしまったら、それはそれで情けない!頑張っ"
 "てくださいな!"
 
-#: ssAppMain.py:374
+msgid ""
+"Welcome to chaos mode, where nothing is fair! Every enemy you defeat drops "
+"an item, on top of the regular item rain. Falling speed tells you nothing "
+"anymore: good and bad items are completely random. There is no accuracy "
+"bonus here; instead, grabbing any item, good or bad, earns you points, while "
+"letting one hit the ground costs you, and smashing one with your up arrow "
+"costs you double! And the destruction item? It now flips a coin for each "
+"item, obtaining or destroying it, and the enemies it clears rain down even "
+"more items. Embrace the chaos!"
+msgstr ""
+
+msgid ""
+"Welcome to Yolo mode, a zero-player autoplay of chaos! Sit back and listen: "
+"a bot takes over, moving and punching for you. It always hits the nearest "
+"target, prioritizing enemies, chasing the destruction item, collecting good "
+"items and smashing bad ones. You don't need to touch the keyboard. Just "
+"enjoy the show!"
+msgstr ""
+
 #, python-format
 msgid "Tip: %s (Press enter to close this tip)"
 msgstr "ヒント: %s (エンターで閉じます)"
 
-#: ssAppMain.py:383
 msgid "Please select the game mode to view"
 msgstr "ゲームモードを選択してください"
 
-#: ssAppMain.py:385 ssAppMain.py:408 ssAppMain.py:449
 msgid "Back"
 msgstr "戻る"
 
-#: ssAppMain.py:401
 #, python-format
 msgid "This build of %(gamename)s does not support scoreboard viewing."
 msgstr ""
 "この %(gamename)s のビルドでは、スコアボード閲覧はサポートされていません。"
 
-#: ssAppMain.py:404
 #, python-format
 msgid "Score table for %(mode)s"
 msgstr "%(mode)s のスコアテーブル"
 
-#: ssAppMain.py:423
 #, python-format
 msgid ""
 "The manual written in the selected language doesn't seem to exist. If you "
@@ -426,7 +393,6 @@ msgstr ""
 "ていただけるなら、%(filename)sという名前でファイルを作って、作者までご連絡く"
 "ださい。"
 
-#: ssAppMain.py:429
 msgid ""
 "Use your up and down arrows to read the manual. You can navigate to each "
 "section by using shortcut keys 1 to 9. Press escape to close"
@@ -434,31 +400,24 @@ msgstr ""
 "上下の矢印キーでマニュアルを読むことができます。数字キーの1から9のショート"
 "カットを押すことで、対応するセクションに移動することができます"
 
-#: ssAppMain.py:449
 msgid "Select the data to erase"
 msgstr "削除するデータを選んでください"
 
-#: ssAppMain.py:449
 msgid "Highscores"
 msgstr "ハイスコア"
 
-#: ssAppMain.py:449
 msgid "Collections"
 msgstr "コレクション"
 
-#: ssAppMain.py:459
 msgid "Hold shift and enter to erase."
 msgstr "シフトキーを押しながら確定すると、削除を実行します。"
 
-#: ssAppMain.py:464
 msgid "Your highscores are all reset!"
 msgstr "ハイスコアをクリアしました。"
 
-#: ssAppMain.py:468
 msgid "Your collections are all reset!"
 msgstr "コレクションをクリアしました。"
 
-#: ssAppMain.py:479
 msgid ""
 "Options Menu, use your up and down arrows to choose an option, left and "
 "right arrows to change values, enter to save or escape to discard changes"
@@ -466,49 +425,38 @@ msgstr ""
 "設定メニューです。上下の矢印キーで設定項目を移動し、左右矢印で値を変更しま"
 "す。エンターキーで設定を保存し、エスケープキーで変更を破棄します。"
 
-#: ssAppMain.py:480
 msgid "Background music volume"
 msgstr "BGMの音量"
 
-#: ssAppMain.py:481
 msgid "Left panning limit"
 msgstr "左側のパンニング・リミット"
 
-#: ssAppMain.py:482
 msgid "Right panning limit."
 msgstr "右側のパンニング・リミット"
 
-#: ssAppMain.py:483
 msgid "Item announcement voice"
 msgstr "アイテム・アナウンスの声"
 
-#: ssAppMain.py:484
 msgid "Language (restart to apply)"
 msgstr "言語(再起動後に適用)"
 
-#: ssAppMain.py:498
 msgid "Changes discarded."
 msgstr "変更を破棄しました。"
 
-#: ssAppMain.py:503
 msgid "Settings saved"
 msgstr "設定を保存しました。"
 
-#: ssAppMain.py:572
 #, python-format
 msgid "%(voice)s cannot be loaded."
 msgstr "%(voice)s を読み込めません。"
 
-#: ssAppMain.py:604
 #, python-format
 msgid "%(playmode)s, high score %(highscore)s, start!"
 msgstr "%(playmode)s、ハイスコア%(highscore)s、スタート!"
 
-#: ssAppMain.py:648
 msgid "Game paused"
 msgstr "ゲームをポーズしました"
 
-#: ssAppMain.py:649
 msgid ""
 "Press enter or escape to resume. Use your up and down arrows to view current "
 "stats."
@@ -516,12 +464,10 @@ msgstr ""
 "エンター、またはエスケープキーでゲームを再開します。上下矢印キーで、現在の状"
 "況を確認できます。"
 
-#: ssAppMain.py:650
 #, python-format
 msgid "Score: %(score)d"
 msgstr "スコア: %(score)d"
 
-#: ssAppMain.py:652
 #, python-format
 msgid ""
 "You are updating your high score. Currently plus %(distance)d (last: "
@@ -529,22 +475,18 @@ msgid ""
 msgstr ""
 "現在ハイスコアを更新中、プラス%(distance)d (以前のハイスコア: %(last)d)"
 
-#: ssAppMain.py:654 ssAppMain.py:725
 #, python-format
 msgid "Punches: %(punches)d, hits: %(hits)d, accuracy: %(accuracy).2f%%"
 msgstr "パンチ: %(punches)d, ヒット: %(hits)d, ヒット率: %(accuracy).2f%%"
 
-#: ssAppMain.py:656
 #, python-format
 msgid "This game is currently lasting for %(time)s."
 msgstr "現在 %(time)s、ゲームが継続しています。"
 
-#: ssAppMain.py:657
 #, python-format
 msgid "Level: %(level)d, player HP: %(hp)d."
 msgstr "レベル: %(level)d, プレイヤーのHP: %(hp)d."
 
-#: ssAppMain.py:659
 #, python-format
 msgid ""
 "You have %(amount)d stored destructions. You will be protected automatically "
@@ -553,80 +495,63 @@ msgstr ""
 "%(amount)d noのDestructionが保管されています。これらを消費する代わりに、攻撃"
 "から守られます。"
 
-#: ssAppMain.py:662
 #, python-format
 msgid "Active item effects: %(fx)d"
 msgstr "発動中のアイテム効果: %(fx)d"
 
-#: ssAppMain.py:666
 msgid "-- Last 10 logs --"
 msgstr "-- 最新10件のログ --"
 
-#: ssAppMain.py:697
 msgid "collection"
 msgstr "コレクション"
 
-#: ssAppMain.py:697
 msgid "collections"
 msgstr "コレクション"
 
-#: ssAppMain.py:698
 #, python-format
 msgid "Unlocked %(number)d %(collection)s!"
 msgstr "%(number)d個の%(collection)sを解放!"
 
-#: ssAppMain.py:702
 msgid "Close"
 msgstr "閉じる"
 
-#: ssAppMain.py:717
 msgid "Game result"
 msgstr "今回の結果"
 
-#: ssAppMain.py:718
 #, python-format
 msgid "Final score: %(score)d"
 msgstr "最終得点: %(score)d"
 
-#: ssAppMain.py:720
 #, python-format
 msgid "New high score! Plus %(distance)d (last: %(last)d)"
 msgstr "ハイスコア達成! プラス%(distance)d (以前のハイスコア: %(last)d)"
 
-#: ssAppMain.py:731
 #, python-format
 msgid "This game lasted for %(time)s."
 msgstr "このゲームは、%(time)s 継続しました。"
 
-#: ssAppMain.py:732
 #, python-format
 msgid "You reached level %(level)d."
 msgstr "レベル%(level)dまで到達しました。"
 
-#: ssAppMain.py:752
 msgid "Score posting"
 msgstr "スコア送信"
 
-#: ssAppMain.py:752
 msgid "Do you want to post this score to the scoreboard?"
 msgstr "このスコアをスコアボードに送信しますか？"
 
-#: ssAppMain.py:754 ssAppMain.py:755
 msgid "Please input your name."
 msgstr "貴方の名前を入力してください。"
 
-#: ssAppMain.py:755
 msgid "Name entry"
 msgstr "名前入力"
 
-#: ssAppMain.py:764
 #, python-format
 msgid "This build of %(gamename)s does not support score posting. Sorry!"
 msgstr ""
 "この %(gamename)s のビルドでは、スコア送信はサポートされていません。ごめんな"
 "さい！"
 
-#: ssAppMain.py:768
 #, python-format
 msgid ""
 "There was an error while posting your score (%(error)s). Please try again "
@@ -635,14 +560,12 @@ msgstr ""
 "スコア送信中にエラーが発生しました(%(error)s)。しばらくしてからもう一度お試し"
 "ください。"
 
-#: ssAppMain.py:773
 msgid ""
 "Your score was posted, but you were not ranked in. Better luck next time!"
 msgstr ""
 "スコアは送信されましたが、ランクインとはなりませんでした。次はがんばってくだ"
 "さい！"
 
-#: ssAppMain.py:776
 #, python-format
 msgid ""
 "Congratulations! Your score has ranked in position %(pos)d! Keep up your "
@@ -651,33 +574,26 @@ msgstr ""
 "おめでとうございます！%(pos)d位にランクインしました！これからもがんばってくだ"
 "さい！"
 
-#: ssAppMain.py:818
 msgid "Yes"
 msgstr "はい"
 
-#: ssAppMain.py:819
 msgid "No"
 msgstr "いいえ"
 
-#: ssAppMain.py:876
 msgid "Update downloading is still in progress"
 msgstr "アップデートのダウンロードがまだ実行中です"
 
-#: ssAppMain.py:878
 msgid "Forcefully shutdown"
 msgstr "強制終了"
 
-#: ssAppMain.py:886
 msgid "Download job has ended! Press enter to close the application."
 msgstr ""
 "ダウンロード処理が終了しました！エンターキーを押すと、ゲームを終了します。"
 
-#: ssAppMain.py:898
 msgid "Choose 'Forcefully shutdown' or alt+f4 to abort the download."
 msgstr ""
 "'強制終了' を選択するか、もう一度alt+f4を推すと、ダウンロードを中断できます。"
 
-#: ssAppMain.py:931
 #, python-format
 msgid ""
 "The changelog file written in the selected language doesn't seem to exist. "
@@ -688,6 +604,5 @@ msgstr ""
 "ただけるなら、%(filename)sという名前でファイルを作って、作者までご連絡くださ"
 "い。"
 
-#: ssAppMain.py:936
 msgid "Changelog"
 msgstr "更新履歴"
