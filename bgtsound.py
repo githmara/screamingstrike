@@ -123,7 +123,9 @@ class sound():
         return s
 
     def close(self):
-        if self.handle:
+        # Streams expose free(); sample-based channels do not (BASS recycles them with the sample),
+        # so guard the call. Without this, reloading a sample-backed sound crashes with AttributeError.
+        if self.handle and hasattr(self.handle, "free"):
             self.handle.free()
 
 # helper functions
