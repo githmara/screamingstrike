@@ -52,7 +52,7 @@ class ssAppMain(window.SingletonWindow):
 
         :rtype: bool
         """
-        super().initialize(640, 480, buildSettings.GAME_NAME + " (" + str(buildSettings.GAME_VERSION) + ")")
+        super().initialize(640, 480, buildSettings.GAME_NAME + " (" + buildSettings.GAME_VERSION_STRING + ")")
         globalVars.appMain = self
         # data path patch
         files = glob.glob("data/*.dat")
