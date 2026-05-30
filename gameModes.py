@@ -491,6 +491,12 @@ class YoloModeHandler(ChaosModeHandler):
     local for-fun use only.
     """
 
+    # Tighter bounding measures than Chaos: the autoplay bot barely loses HP (it reached level 319
+    # before exhausting the BASS channel pool), so cap HP / destruction shields lower to make the
+    # zero-player run actually end at a sane level. Chaos and the other modes keep their own caps.
+    MAX_LIVES = 3
+    MAX_DESTRUCTION_SHIELDS = 1
+
     def __init__(self):
         super().__init__()
         self.name = ALL_MODES_STR[5]
