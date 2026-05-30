@@ -185,7 +185,7 @@ for file in glob.glob("public/*.*"):
 
 if win:
     print("Renaming to play.exe")
-    os.remove(copydir + "/" + PROJECT + ".exe.manifest")
+    # os.remove(copydir + "/" + PROJECT + ".exe.manifest")
     os.rename(copydir + "/" + PROJECT + ".exe", copydir + "/play.exe")
 dopackage()
 print("Done!")
