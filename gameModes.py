@@ -114,6 +114,10 @@ class ModeHandlerBase(object):
         """Bonus score granted when an Extra life is obtained while already at the life cap. Default 0."""
         return 0
 
+    def getDefeatSoundY(self, y):
+        """Y position used to compute the volume of a defeated enemy's scream / bodyfall. Base: the enemy's actual y, so the defeat sound fades with distance like everything else. Pitch and X panning are unaffected."""
+        return y
+
     def onEnemyDefeated(self, x=None, y=None):
         """Called when the player defeated an enemy. x / y are the grid coordinates of the defeated enemy (may be None when unknown)."""
         pass
@@ -500,6 +504,10 @@ class YoloModeHandler(ChaosModeHandler):
     def __init__(self):
         super().__init__()
         self.name = ALL_MODES_STR[5]
+
+    def getDefeatSoundY(self, y):
+        """Yolo: play a defeated enemy's scream / bodyfall at a fixed near distance (y=4, ~-6 dB) regardless of how far away it actually died. Yolo is a zero-player 'sit back and enjoy the show' mode, but once the item shower ramps up the enemy screams (which normally fade with distance) get buried under it. Pinning them to a close, loud position keeps the screams — the whole point of the show — audible; y=4 rather than 0 so that on high levels, with many enemies dying at once, the full-volume screams don't pile up into a wall of noise. Random pitch and X panning are left untouched."""
+        return 4
 
     def frameUpdate(self):
         super().frameUpdate()  # regular Chaos / Arcade item spawning

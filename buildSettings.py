@@ -12,7 +12,7 @@ GAME_NAME = "Screaming Strike 2"
 GAME_VERSION = 2.08
 # Human-facing version label for this unofficial fork. Used only for display (window title), so it can
 # carry the "-fork" suffix without breaking the numeric GAME_VERSION logic.
-GAME_VERSION_STRING = "2.08.4-fork"
+GAME_VERSION_STRING = "2.08.5-fork"
 # Specify the path to the updateChecker.php, leave it blank to disable update checking
 UPDATE_SERVER_ADDRESS = ""
 # Specify win and mac installer remote paths, leave them blank to disable

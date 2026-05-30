@@ -136,7 +136,7 @@ class Enemy():
         self.scream.load(globalVars.appMain.sounds["scream%d.ogg" % self.screamNum])
         self.scream.pitch = random.randint(SCREAM_PITCH_LOW, SCREAM_PITCH_HIGH)
         self.scream.pan = self.field.getPan(self.x)
-        self.scream.volume = self.field.getVolume(self.y)
+        self.scream.volume = self.field.getVolume(self.field.modeHandler.getDefeatSoundY(self.y))
         self.scream.play()
 
     def playBodyfall(self):
@@ -145,5 +145,5 @@ class Enemy():
         self.bodyfall.load(globalVars.appMain.sounds["dead.ogg"])
         self.bodyfall.pitch = random.randint(70, 130)
         self.bodyfall.pan = self.field.getPan(self.x)
-        self.bodyfall.volume = self.field.getVolume(self.y)
+        self.bodyfall.volume = self.field.getVolume(self.field.modeHandler.getDefeatSoundY(self.y))
         self.bodyfall.play()
